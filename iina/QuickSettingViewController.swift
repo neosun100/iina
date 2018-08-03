@@ -131,10 +131,6 @@ class QuickSettingViewController: NSViewController, NSTableViewDataSource, NSTab
       self.withAllTableViews { tableView, _ in tableView.reloadData() }
     }
     observers.append(tracklistChangeObserver)
-    let afChangeObserver = NotificationCenter.default.addObserver(forName: .iinaAFChanged, object: player, queue: OperationQueue.main) { _ in
-      self.updateAudioEqState()
-    }
-    observers.append(afChangeObserver)
   }
 
   // MARK: - Validate UI
@@ -577,6 +573,7 @@ class QuickSettingViewController: NSViewController, NSTableViewDataSource, NSTab
 
   @IBAction func resetAudioEqAction(_ sender: AnyObject) {
     player.removeAudioEqFilter()
+    updateAudioEqState()
   }
 
 
