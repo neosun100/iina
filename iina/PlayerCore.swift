@@ -1351,28 +1351,32 @@ class PlayerCore: NSObject {
   }
 
   func getPlaylist() {
-    info.playlist.removeAll()
-    let playlistCount = mpv.getInt(MPVProperty.playlistCount)
-    for index in 0..<playlistCount {
-      let playlistItem = MPVPlaylistItem(filename: mpv.getString(MPVProperty.playlistNFilename(index))!,
-                                         isCurrent: mpv.getFlag(MPVProperty.playlistNCurrent(index)),
-                                         isPlaying: mpv.getFlag(MPVProperty.playlistNPlaying(index)),
-                                         title: mpv.getString(MPVProperty.playlistNTitle(index)))
-      info.playlist.append(playlistItem)
+    DispatchQueue.main.sync {
+      info.playlist.removeAll()
+      let playlistCount = mpv.getInt(MPVProperty.playlistCount)
+      for index in 0..<playlistCount {
+        let playlistItem = MPVPlaylistItem(filename: mpv.getString(MPVProperty.playlistNFilename(index))!,
+                                           isCurrent: mpv.getFlag(MPVProperty.playlistNCurrent(index)),
+                                           isPlaying: mpv.getFlag(MPVProperty.playlistNPlaying(index)),
+                                           title: mpv.getString(MPVProperty.playlistNTitle(index)))
+        info.playlist.append(playlistItem)
+      }
     }
   }
 
   func getChapters() {
-    info.chapters.removeAll()
-    let chapterCount = mpv.getInt(MPVProperty.chapterListCount)
-    if chapterCount == 0 {
-      return
-    }
-    for index in 0..<chapterCount {
-      let chapter = MPVChapter(title:     mpv.getString(MPVProperty.chapterListNTitle(index)),
-                               startTime: mpv.getDouble(MPVProperty.chapterListNTime(index)),
-                               index:     index)
-      info.chapters.append(chapter)
+    DispatchQueue.main.sync {
+      info.chapters.removeAll()
+      let chapterCount = mpv.getInt(MPVProperty.chapterListCount)
+      if chapterCount == 0 {
+        return
+      }
+      for index in 0..<chapterCount {
+        let chapter = MPVChapter(title:     mpv.getString(MPVProperty.chapterListNTitle(index)),
+                                 startTime: mpv.getDouble(MPVProperty.chapterListNTime(index)),
+                                 index:     index)
+        info.chapters.append(chapter)
+      }
     }
   }
 
